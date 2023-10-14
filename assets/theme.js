@@ -332,7 +332,7 @@ export var theme = {
   },
 
   panel:  {
-    HeaderBorderRadius    : 0,
+    HeaderBorderRadius    : 5,
     HeaderRadius          : 2,
     TitleBackground       : 'rgba(225,225,225, 1)',
     TitleBorder           : 'rgba(104,104,104, 1)',
@@ -351,7 +351,7 @@ export var theme = {
     'border-width'        : 1.141,
     'margin-bottom'       : 0,
     'margin-bottom-closed': 0,
-    'margin-left'         : 5.6584810220495445,
+    'margin-left'         : 0,
     'margin-right'        : 10,
     'margin-top'          : 0,
     'margin-top-closed'   : 0,

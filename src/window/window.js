@@ -40,14 +40,19 @@ export class Window extends AppArea {
     this.style["overflow"] = "scroll";
   }
 
+  saveData(sampleCurves=false) {
+    return this.builder.saveData(this.ctx, sampleCurves);
+  }
+
   loadXML(xmlbuf) {
-    let builder = new WindowBuilder(this.ctx, xmlbuf);
+    let builder = this.builder = new WindowBuilder(this.ctx, xmlbuf);
     this.shadow.appendChild(builder.container);
+    builder.container.style["margin-left"] = "10px";
 
     builder.build();
 
-    this.ctx.theme.completeUpdate();
-    this.ctx.theme.completeUpdate();
+    this.ctx.screen.completeUpdate();
+    this.ctx.screen.completeUpdate();
   }
 }
 

@@ -1,4 +1,8 @@
-import {Context, DataAPI, exportTheme, PackFlags} from '../../lib/pathux.js';
+import {
+  Context, DataAPI, exportTheme, PackFlags,
+  Vector2, Vector3, Vector4, nstructjs,
+  Curve1D
+} from '../../lib/pathux.js';
 
 export function readXML(xml) {
   let parser = new DOMParser()
@@ -18,6 +22,14 @@ class StackItem {
 function getFloat(node, name, fallback) {
   if (node.hasAttribute(name)) {
     return parseFloat(node.getAttribute(name));
+  } else {
+    return fallback;
+  }
+}
+
+function getInt(node, name, fallback) {
+  if (node.hasAttribute(name)) {
+    return parseInt(node.getAttribute(name));
   } else {
     return fallback;
   }
@@ -49,6 +61,8 @@ export class WindowBuilder {
     class PropStructType {
     }
 
+    this.propDefs = {};
+
     this.apiStruct = this.api.mapStruct(PropStructType);
 
     let ctxStruct = this.api.mapStruct(Context);
@@ -56,6 +70,39 @@ export class WindowBuilder {
     ctxStruct.struct("props", "props", "props", this.apiStruct);
 
     ctx.props = this.props;
+  }
+
+  saveData(ctx, sampleCurves = false) {
+    let props = ctx.props;
+    let ret = {};
+
+    for (let k in this.propDefs) {
+      let dpath = this.propDefs[k];
+      let v = props[k];
+
+      if (typeof v === "number" || typeof v === "boolean") {
+        ret[k] = v;
+      } else if (v instanceof Vector2 || v instanceof Vector3 || v instanceof Vector4) {
+        ret[k] = Array.from(v);
+      } else if (v instanceof Curve1D) {
+        if (sampleCurves) {
+          console.log(dpath);
+
+          let tot = dpath.samplePoints;
+          let t = dpath.xmin;
+          let dt = (dpath.xmax - dpath.xmin)/(tot - 1);
+          ret[k] = [];
+
+          for (let i = 0; i < tot; i++, t += dt) {
+            ret[k].push(v.evaluate(t));
+          }
+        } else {
+          ret[k] = nstructjs.writeJSON(v);
+        }
+      }
+    }
+
+    return ret;
   }
 
   build() {
@@ -82,7 +129,9 @@ export class WindowBuilder {
         console.error(error.message);
         this.container.label("error");
 
-        this.visit(node);
+        for (let i = 0; i < node.childNodes; i++) {
+          this.visit(node.childNodes[i]);
+        }
       }
     }
   }
@@ -106,12 +155,21 @@ export class WindowBuilder {
       .decimalPlaces(dec)
       .slideSpeed(slideSpeed)
       .step(step)
-      .simpleSlider(true)
+
+    if (getBool(node, "slider")) {
+      dpath.simpleSlider(true);
+    }
   }
 
   handleBasicProp(node, dpath) {
     if (node.hasAttribute("uiName")) {
       dpath.data.uiname = node.getAttribute("uiName");
+    }
+
+    if (node.hasAttribute("description")) {
+      dpath.description(node.getAttribute("description"));
+    } else if (node.hasAttribute("tooltip")) {
+      dpath.description(node.getAttribute("tooltip"));
     }
   }
 
@@ -123,12 +181,107 @@ export class WindowBuilder {
     this.handleBasicProp(node, dpath);
     this.handleNumProp(node, dpath);
 
-    let elem;
-    if (getBool(node, "slider")) {
-      elem = this.container.slider(`props.${name}`);
-    } else {
-      elem = this.container.simpleslider(`props.${name}`);
-    }
+    this.container.slider(`props.${name}`);
+    this.propDefs[name] = dpath;
+  }
+
+  _int(node) {
+    let name = node.getAttribute("name");
+    this.props[name] = Math.floor(getFloat(node, "value", 0));
+    let dpath = this.apiStruct.int(name, name, ToolProperty.makeUIName(name));
+
+    this.handleBasicProp(node, dpath);
+    this.handleNumProp(node, dpath);
+
+    this.container.slider(`props.${name}`);
+    this.propDefs[name] = dpath;
+  }
+
+  _vec2(node) {
+    let name = node.getAttribute("name");
+    this.props[name] = new Vector2([
+      getFloat(node, "x", 0),
+      getFloat(node, "y", 0)
+    ]);
+
+    let dpath = this.apiStruct.vec2(name, name, ToolProperty.makeUIName(name));
+
+    this.handleBasicProp(node, dpath);
+    this.handleNumProp(node, dpath);
+
+    this.container.prop(`props.${name}`);
+    this.propDefs[name] = dpath;
+  }
+
+  _vec3(node) {
+    let name = node.getAttribute("name");
+    this.props[name] = new Vector3([
+      getFloat(node, "x", 0),
+      getFloat(node, "y", 0),
+      getFloat(node, "z", 0)
+    ]);
+
+    let dpath = this.apiStruct.vec3(name, name, ToolProperty.makeUIName(name));
+
+    this.handleBasicProp(node, dpath);
+    this.handleNumProp(node, dpath);
+
+    this.container.prop(`props.${name}`);
+    this.propDefs[name] = dpath;
+  }
+
+  _vec4(node) {
+    let name = node.getAttribute("name");
+    this.props[name] = new Vector4([
+      getFloat(node, "x", 0),
+      getFloat(node, "y", 0),
+      getFloat(node, "z", 0),
+      getFloat(node, "w", 0)
+    ]);
+
+    let dpath = this.apiStruct.vec4(name, name, ToolProperty.makeUIName(name));
+
+    this.handleBasicProp(node, dpath);
+    this.handleNumProp(node, dpath);
+
+    this.container.prop(`props.${name}`);
+    this.propDefs[name] = dpath;
+  }
+
+  _color(node) {
+    let name = node.getAttribute("name");
+    this.props[name] = new Vector4([
+      getFloat(node, "r", 0),
+      getFloat(node, "g", 0),
+      getFloat(node, "b", 0),
+      getFloat(node, "a", 0)
+    ]);
+
+    let dpath = this.apiStruct.color4(name, name, ToolProperty.makeUIName(name));
+
+    this.handleBasicProp(node, dpath);
+
+    this.container.prop(`props.${name}`);
+    this.propDefs[name] = dpath;
+  }
+
+  _curve(node) {
+    let name = node.getAttribute("name");
+    this.props[name] = new Curve1D();
+
+    let dpath = this.apiStruct.curve1d(name, name, name);
+    this.handleBasicProp(node, dpath);
+    dpath.samplePoints = getInt(node, "samplePoints", 10);
+    dpath.xmin = getFloat(node, "xmin", 0);
+    dpath.xmax = getFloat(node, "xmax", 1);
+    dpath.ymin = getFloat(node, "ymin", 0);
+    dpath.ymax = getFloat(node, "ymax", 1);
+
+    let panel = this.container.panel(name);
+    panel.closed = getBool(node, "collapsed", true);
+
+    panel.curve1d(`props.${name}`);
+    this.propDefs[name] = dpath;
   }
 
   _bool(node) {
@@ -137,8 +290,8 @@ export class WindowBuilder {
     let dpath = this.apiStruct.bool(name, name, ToolProperty.makeUIName(name));
 
     this.handleBasicProp(node, dpath);
-
     this.container.prop(`props.${name}`);
+    this.propDefs[name] = dpath;
   }
 
   _panel(node) {

@@ -5,9 +5,11 @@
     window.haveElectron = true;
 
     window.app_init = () => {
-      import ("../src/startup.js").then(startup => {
-        startup.start();
-      });
+      window.setTimeout(() => {
+        import ("../src/startup.js").then(startup => {
+          startup.start();
+        });
+      }, 750);
     }
   </script>
   <style>
@@ -19,6 +21,5 @@
   </style>
 </head>
 <body onload="app_init()">
-
 </body>
 </html>
