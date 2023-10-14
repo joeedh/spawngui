@@ -1,0 +1,8 @@
+<window>
+  <panel name="Panel" collapsed="false">
+    <float name="prop1" value="5" min="0" max="10" slider="true" slideSpeed="1" decimalPlaces="3" unit="none"/>
+    <bool name="option1" yes="yes" no="no"/>
+    <process name="Test" cmd="echo $prop1 $option1"/>
+  </panel>
+  <theme_editor/>
+</window>

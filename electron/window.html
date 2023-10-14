@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head>
+  <script type="module">
+    window.haveElectron = true;
+
+    window.app_init = () => {
+      import ("../src/startup.js").then(startup => {
+        startup.start();
+      });
+    }
+  </script>
+  <style>
+      body {
+          margin: 0px;
+          padding: 0px;
+          overflow: hidden;
+      }
+  </style>
+</head>
+<body onload="app_init()">
+
+</body>
+</html>
