@@ -1,4 +1,4 @@
-import './window/window.js';
+import './windows/sheet/sheet.js';
 import {App} from './core/app.js';
 import {IconManager, cconst, setIconManager, setIconMap, setTheme} from '../lib/pathux.js';
 import {Icons} from '../assets/icon_enum.js';

@@ -1,3 +1,5 @@
+const debug = true;
+
 function print_help() {
   console.log("\nexpected file path\n");
 }
@@ -139,9 +141,18 @@ const createWindow = () => {
   const preloadPath = pathmod.join(__dirname, "preload.cjs");
   console.error(preloadPath);
 
+  let w, h;
+  if (debug) {
+    w = 1400;
+    h = 900;
+  } else {
+    w = 1000;
+    h = 900;
+  }
+
   globalThis.win = new BrowserWindow({
-    width          : 1400,
-    height         : 900,
+    width          : w,
+    height         : h,
     nodeIntegration: true,
     webPreferences : {
       nodeIntegration        : true,
@@ -157,7 +168,9 @@ const createWindow = () => {
   });
 
   win.loadFile('electron/window.html')
-  win.webContents.openDevTools();
+  if (debug) {
+    win.webContents.openDevTools();
+  }
 }
 
 app.whenReady().then(() => {

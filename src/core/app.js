@@ -1,7 +1,8 @@
-import {Window} from '../window/window.js';
+import {Sheet} from '../windows/sheet/sheet.js';
 import {DataAPI, ToolStack} from '../../lib/pathux.js';
 import {AppContext} from './context.js';
-import {MainMenu} from '../window/menu.js';
+import {MainMenu} from '../windows/mainmenu/menu.js';
+import {Console} from '../windows/console/console.js';
 
 export class App {
   screen = undefined;
@@ -21,10 +22,15 @@ export class App {
     sarea.ctx = this.ctx;
 
     screen.appendChild(sarea);
-    sarea.switchEditor(Window);
+    sarea.switchEditor(Sheet);
 
     let sarea2 = screen.splitArea(sarea, 0.1, true);
     sarea.switchEditor(MainMenu);
+
+    if (0) {
+      let sarea3 = screen.splitArea(sarea2, 0.6);
+      sarea3.switchEditor(Console);
+    }
 
     if (this.screen) {
       this.screen.unlisten();
@@ -32,7 +38,6 @@ export class App {
     }
 
     document.body.style["margin"] = document.body.style["padding"] = "0px";
-
     document.body.appendChild(screen);
 
     this.screen = screen;

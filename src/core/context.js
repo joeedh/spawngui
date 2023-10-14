@@ -1,6 +1,6 @@
 import {contextWrangler, Context, ContextOverlay} from '../../lib/pathux.js';
-import {AppArea} from '../window/area_base.js';
-import {Window} from '../window/window.js';
+import {AppArea} from '../windows/area_base.js';
+import {Sheet} from '../windows/sheet/sheet.js';
 
 export class AppContext {
   get state() {
@@ -20,7 +20,7 @@ export class AppContext {
   }
 
   get window() {
-    return AppArea.getLastArea(Window);
+    return AppArea.getLastArea(Sheet);
   }
 
   props = {};

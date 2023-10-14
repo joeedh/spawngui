@@ -1,6 +1,6 @@
-import {ScreenArea, Area, Screen, UIBase} from '../../lib/pathux.js';
-import {AppArea} from './area_base.js';
-import {WindowBuilder} from './parsexml.js';
+import {ScreenArea, Area, Screen, UIBase} from '../../../lib/pathux.js';
+import {AppArea} from '../area_base.js';
+import {WindowBuilder} from '../parsexml.js';
 
 export class AppScreen extends Screen {
   static define() {
@@ -12,7 +12,7 @@ export class AppScreen extends Screen {
 
 UIBase.register(AppScreen);
 
-export class Window extends AppArea {
+export class Sheet extends AppArea {
   static define() {
     return {
       areaname: "window",
@@ -40,7 +40,7 @@ export class Window extends AppArea {
     this.style["overflow"] = "scroll";
   }
 
-  saveData(sampleCurves=false) {
+  savePropData(sampleCurves=false) {
     return this.builder.saveData(this.ctx, sampleCurves);
   }
 
@@ -56,4 +56,4 @@ export class Window extends AppArea {
   }
 }
 
-Area.register(Window);
+Area.register(Sheet);

@@ -1,5 +1,5 @@
-import {ScreenArea, platform, electron_api, Area, Screen, UIBase, AreaFlags} from '../../lib/pathux.js';
-import {AppArea} from './area_base.js';
+import {ScreenArea, platform, electron_api, Area, Screen, UIBase, AreaFlags} from '../../../lib/pathux.js';
+import {AppArea} from '../area_base.js';
 
 export class MainMenu extends AppArea {
   #height = 32;
