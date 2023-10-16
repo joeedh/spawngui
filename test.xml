@@ -5,7 +5,7 @@
     <process name="Test" cmd="echo $prop1 $option1"/>
   </panel>
   <vec2 name="vec2" x="1" y="2"/>
-  <vec3 name="vec3"/>
+  <vec3 name="vector3"/>
   <vec4 name="vec4"/>
   <string name="string1"/>
   <color name="color1" tooltip="A Color"/>
