@@ -8,6 +8,6 @@ export default {
     autoSizeUpdate     : true,
     colorSchemeType    : "light",
     //useAreaTabSwitcher : true,
-
+    noElectronMenus: true,
   }
 };

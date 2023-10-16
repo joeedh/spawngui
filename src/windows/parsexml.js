@@ -287,6 +287,7 @@ export class WindowBuilder {
   _bool(node) {
     let name = node.getAttribute("name");
     this.props[name] = getBool(node, "value", false);
+
     let dpath = this.apiStruct.bool(name, name, ToolProperty.makeUIName(name));
 
     this.handleBasicProp(node, dpath);

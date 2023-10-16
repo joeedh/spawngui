@@ -14,6 +14,8 @@ Object.defineProperty(window, "C", {
 export function start() {
   console.log("App start!");
 
+  cconst.loadConstants(config.pathux_config);
+
   require("electron").webFrame.setZoomFactor(1.0);
 
   /* Load icons. */
@@ -21,13 +23,11 @@ export function start() {
   img.src = "../assets/iconsheet.svg"
   let iconmanager = new IconManager(
     [img, img, img, img],
-    [[18, 16], [32, 16], [48, 16], [64, 16]], 16);
+    [[32, 16], [32, 25], [32, 32], [32, 50]], 16);
 
   setIconManager(iconmanager);
   setIconMap(Icons);
   setTheme(theme);
-
-  cconst.loadConstants(config.pathux_config);
 
   window._appstate = new App();
   window._appstate.makeScreen();
