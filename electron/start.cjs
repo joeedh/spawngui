@@ -1,4 +1,5 @@
-const debug = true;
+
+const debug = 1;
 
 function print_help() {
   console.log("\nexpected file path\n");
@@ -13,6 +14,7 @@ const fs = require('fs');
 
 let filepath = process.argv[2];
 let xmlbuf = fs.readFileSync(filepath, "utf8");
+const pathmod = require("path");
 
 const {app, BrowserWindow, dialog} = require('electron')
 const {ipcMain, Menu, MenuItem, nativeTheme} = require('electron')
@@ -55,6 +57,10 @@ let menuBarId = undefined;
 
 ipcMain.handle("getXMLFile", function(e) {
   return xmlbuf;
+});
+
+ipcMain.handle("getXMLPath", function(e) {
+  return pathmod.normalize(pathmod.resolve(filepath));
 });
 
 ipcMain.handle("nativeTheme.setThemeSource", async (event, val) => {
@@ -134,8 +140,6 @@ ipcMain.handle('show-save-dialog', async (event, args, then, catchf) => {
     return [e];
   })).catch(makeInvoker(event, catchf));
 });
-
-const pathmod = require("path");
 
 const createWindow = () => {
   const preloadPath = pathmod.join(__dirname, "preload.cjs");

@@ -305,16 +305,48 @@ export var theme = {
   },
 
   numslider:  {
+    TextBoxWidth      : 30,
+    'arrow-color'     : '50%',
     'background-color': 'rgba(219,219,219, 1)',
     'border-color'    : 'black',
     'border-radius'   : 1,
     height            : 22,
+    highlight         : {
+      DefaultText : new CSSFont({
+        font    : 'poppins',
+        weight  : 'bold',
+        variant : 'normal',
+        style   : 'normal',
+        size    : 12,
+        color   : 'rgb(0,0,0)'
+      }),
+      'background-color' : 'rgba(151,208,239, 1)',
+      'border-color' : 'rgba(255,255,255, 1)',
+      'border-style' : 'solid',
+      'border-width' : 1,
+    },
+    pressed           : {
+      DefaultText : new CSSFont({
+        font    : 'poppins',
+        weight  : 'bold',
+        variant : 'normal',
+        style   : 'normal',
+        size    : 12,
+        color   : 'rgba(0,0,0, 1)'
+      }),
+      'arrow-color' : 'rgb(28,28,28)',
+      'background-color' : 'rgba(178,178,178, 1)',
+      'border-color' : 'rgba(255,255,255, 1)',
+      'border-style' : 'solid',
+      'border-width' : 1,
+    },
     width             : 90,
   },
 
   numslider_simple:  {
     SlideHeight       : 10,
-    TextBoxWidth      : 45,
+    TextBoxWidth      : 30,
+    addLabel          : true,
     'background-color': 'rgba(238,238,238, 1)',
     'border-color'    : 'rgba(98,98,98, 1)',
     height            : 22,
@@ -324,7 +356,8 @@ export var theme = {
 
   numslider_textbox:  {
     TextBoxHeight     : 25,
-    TextBoxWidth      : 50,
+    TextBoxWidth      : 30,
+    addLabel          : false,
     'background-color': 'rgba(219,219,219, 1)',
     height            : 25,
     labelOnTop        : true,
@@ -344,7 +377,7 @@ export var theme = {
       size    : 14,
       color   : 'rgba(0,0,0, 1)'
     }),
-    'background-color'    : 'rgba(184,184,184, 0.7594818376068376)',
+    'background-color'    : 'rgba(210,210,210, 0.7594818376068376)',
     'border-color'        : 'rgba(0,0,0, 0)',
     'border-radius'       : 2,
     'border-style'        : 'groove',
@@ -436,6 +469,8 @@ export var theme = {
       color   : 'rgba(3,3,3, 1)'
     }),
     'background-color': 'rgba(245,245,245, 1)',
+    'border-radius'   : 5,
+    width             : 150,
   },
 
   tooltip:  {

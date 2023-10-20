@@ -1,6 +1,7 @@
 import {contextWrangler, Context, ContextOverlay} from '../../lib/pathux.js';
 import {AppArea} from '../windows/area_base.js';
 import {Sheet} from '../windows/sheet/sheet.js';
+import {Console} from '../windows/console/console.js';
 
 export class AppContext {
   get state() {
@@ -23,7 +24,17 @@ export class AppContext {
     return AppArea.getLastArea(Sheet);
   }
 
-  props = {};
+  get console() {
+    return AppArea.getLastArea(Console);
+  }
+
+  get props() {
+    return this.builder.props;
+  }
+
+  get builder() {
+    return this.state.builder;
+  }
 
   toLocked() {
     return this;

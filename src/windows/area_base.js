@@ -1,6 +1,8 @@
-import {Area, contextWrangler} from '../../lib/pathux.js';
+import {Area, contextWrangler, nstructjs} from '../../lib/pathux.js';
 
 export class AppArea extends Area {
+  static STRUCT = nstructjs.inherit(AppArea, Area) + `
+}`
   push_ctx_active(dontSetLastRef = false) {
     contextWrangler.updateLastRef(this.constructor, this);
     contextWrangler.push(this.constructor, this, !dontSetLastRef);
@@ -21,3 +23,4 @@ export class AppArea extends Area {
     return this.ctx.screen;
   }
 }
+nstructjs.register(AppArea);

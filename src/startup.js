@@ -11,7 +11,7 @@ Object.defineProperty(window, "C", {
   }
 });
 
-export function start() {
+export async function start() {
   console.log("App start!");
 
   cconst.loadConstants(config.pathux_config);
@@ -29,13 +29,30 @@ export function start() {
   setIconMap(Icons);
   setTheme(theme);
 
-  window._appstate = new App();
-  window._appstate.makeScreen();
-
   let ipc = window.ipc = require("electron").ipcRenderer;
-  ipc.invoke("getXMLFile", []).then(function(xmlbuf) {
-    console.log(xmlbuf);
+  let xmlbuf = await ipc.invoke("getXMLFile", [])
+  console.log(xmlbuf);
 
-    _appstate.ctx.window.loadXML(xmlbuf);
-  });
+  let filepath = await ipc.invoke("getXMLPath", []);
+  console.log("FILEPATH", filepath);
+
+  window._appstate = new App();
+  _appstate.xmlPath = filepath;
+
+  try {
+    _appstate.loadStartupFile();
+  } catch (error) {
+    console.error(error.stack);
+    console.error(error.message);
+    console.error("Failed to load cached screen.");
+
+    _appstate.reset();
+  }
+
+  /* Make screen saver timer.*/
+  window.setInterval(() => {
+    _appstate.saveStartupFile();
+  }, 1000);
+
+  _appstate.ctx.window.loadXML(xmlbuf);
 }

@@ -3,6 +3,7 @@ import {
   Vector2, Vector3, Vector4, nstructjs,
   Curve1D
 } from '../../lib/pathux.js';
+import {execProcess} from './process.js';
 
 export function readXML(xml) {
   let parser = new DOMParser()
@@ -51,12 +52,14 @@ export class WindowBuilder {
   props = {};
 
   constructor(ctx, xmlbuf) {
-    this.root = readXML(xmlbuf).childNodes[0];
-    this.container = document.createElement("container-x");
-    this.container.ctx = ctx;
+    if (xmlbuf) {
+      this.root = readXML(xmlbuf).childNodes[0];
+      this.container = document.createElement("container-x");
+      this.container.ctx = ctx;
+    }
 
     /* Build new data binding API. */
-    this.api = _appstate.api = new DataAPI();
+    this.api = new DataAPI();
 
     class PropStructType {
     }
@@ -68,8 +71,6 @@ export class WindowBuilder {
     let ctxStruct = this.api.mapStruct(Context);
     this.api.rootContextStruct = ctxStruct;
     ctxStruct.struct("props", "props", "props", this.apiStruct);
-
-    ctx.props = this.props;
   }
 
   saveData(ctx, sampleCurves = false) {
@@ -110,9 +111,10 @@ export class WindowBuilder {
   }
 
   exec(node = this.root) {
-    if (node instanceof Text) {
+    if (node instanceof Text || node instanceof Comment) {
       return;
     }
+
     let k = "_" + node.tagName.toLowerCase();
 
     if (this[k]) {
@@ -293,6 +295,15 @@ export class WindowBuilder {
     this.handleBasicProp(node, dpath);
     this.container.prop(`props.${name}`);
     this.propDefs[name] = dpath;
+  }
+
+  _process(node) {
+    let name = node.getAttribute("name");
+    let cmd = node.getAttribute("cmd");
+
+    this.container.button(name, () => {
+      execProcess(this.container.ctx, cmd, this.props);
+    });
   }
 
   _panel(node) {

@@ -5,11 +5,11 @@
     window.haveElectron = true;
 
     window.app_init = () => {
-      window.setTimeout(() => {
+      //window.setTimeout(() => {
         import ("../src/startup.js").then(startup => {
           startup.start();
         });
-      }, 750);
+      //}, 5);
     }
   </script>
   <style>

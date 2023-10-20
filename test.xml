@@ -10,4 +10,7 @@
   <string name="string1"/>
   <color name="color1" tooltip="A Color"/>
   <curve name="curve1" xmin="0" xmax="5" ymin="0" ymax="1" samplePoints="100"/>
+  <!--
+  <theme_editor/>
+  -->
 </window>

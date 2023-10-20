@@ -1,9 +1,15 @@
-import {ScreenArea, platform, electron_api, Area, Screen, UIBase, AreaFlags} from '../../../lib/pathux.js';
+import {
+  ScreenArea, platform, electron_api, Area,
+  Screen, UIBase, AreaFlags, nstructjs
+} from '../../../lib/pathux.js';
 import {AppArea} from '../area_base.js';
 
 export class MainMenu extends AppArea {
   #height = 32;
   #electronInit = false;
+
+  static STRUCT = nstructjs.inherit(MainMenu, AppArea) + `
+}`;
 
   static define() {
     return {
@@ -36,12 +42,13 @@ export class MainMenu extends AppArea {
       return;
 
     if (window.haveElectron) {
+      this.maxSize[1] = this.minSize[1] = 1;
+
       if (!this.#electronInit) {
         console.log("platform", electron_api);
         this.#electronInit = true;
         electron_api.initMenuBar(this);
 
-        this.maxSize[1] = this.minSize[1] = 1;
         this.getScreen().solveAreaConstraints();
       }
 
@@ -65,6 +72,12 @@ export class MainMenu extends AppArea {
     super.init();
 
     this.header.menu("File", []);
+    this.header.menu("View", [
+      ["Console", () => {
+        this.getScreen().toggleConsole();
+      }]
+    ]);
+
     this.header.menu("Edit", [
       ["Undo", () => _appstate.toolstack.undo()],
       ["Redo", () => _appstate.toolstack.redo()],
@@ -77,4 +90,5 @@ export class MainMenu extends AppArea {
   }
 }
 
+nstructjs.register(MainMenu);
 Area.register(MainMenu);

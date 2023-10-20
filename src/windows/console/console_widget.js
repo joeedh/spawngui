@@ -24,7 +24,7 @@ export class ConsoleBuffer {
     lines.length = n;
     for (let i = 0; i < lines.length; i++) {
       if (lines[i] === undefined) {
-        lines[i] = "sdfdsfdsfdsf  " + i;
+        lines[i] = "";
       }
     }
   }
@@ -79,6 +79,7 @@ export class ConsoleEmulator extends UIBase {
 
       if (key.length === 1) {
         this.input(key);
+        this.scrollIntoView();
       }
 
       e.stopPropagation();
@@ -142,6 +143,10 @@ export class ConsoleEmulator extends UIBase {
   }
 
   input(key) {
+    if (typeof key === "number") {
+      key = String.fromCharCode(key);
+    }
+    
     if (this.decodeState) {
       console.log("key", key);
       let ret = this.decodeState.next(key);
@@ -187,6 +192,10 @@ export class ConsoleEmulator extends UIBase {
     }
 
     this.redraw();
+  }
+
+  scrollIntoView() {
+    this.buffer.scrollLine = this.buffer.cursor[1] + 1;
   }
 
   jumpScroll() {
