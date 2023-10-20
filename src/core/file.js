@@ -179,3 +179,6 @@ export function loadAppFile(app, data, options = new FileOptions) {
   return file;
 }
 
+export function saveAppPropsSimple(app) {
+  return JSON.stringify(app.builder.props, undefined, 2)
+}

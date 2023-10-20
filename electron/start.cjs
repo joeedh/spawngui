@@ -1,4 +1,3 @@
-
 const debug = 1;
 
 function print_help() {
@@ -20,7 +19,6 @@ const {app, BrowserWindow, dialog} = require('electron')
 const {ipcMain, Menu, MenuItem, nativeTheme} = require('electron')
 
 function makeInvoker(event, callbackKey, getargs = (args) => {
-  args
 }) {
   return function () {
     let args = getargs(arguments);
@@ -55,11 +53,11 @@ function loadMenu(event, menudef) {
 let menus = {};
 let menuBarId = undefined;
 
-ipcMain.handle("getXMLFile", function(e) {
+ipcMain.handle("getXMLFile", function (e) {
   return xmlbuf;
 });
 
-ipcMain.handle("getXMLPath", function(e) {
+ipcMain.handle("getXMLPath", function (e) {
   return pathmod.normalize(pathmod.resolve(filepath));
 });
 

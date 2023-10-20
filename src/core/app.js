@@ -5,7 +5,7 @@ import {MainMenu} from '../windows/mainmenu/menu.js';
 import {Console} from '../windows/console/console.js';
 import '../windows/screen.js';
 import {WindowBuilder} from './parsexml.js';
-import {loadAppFile, saveAppFile} from './file.js';
+import {loadAppFile, saveAppFile, saveAppPropsSimple} from './file.js';
 
 const LOCALSTORAGE_SCREEN_KEY = "_screen_config";
 
@@ -27,6 +27,10 @@ export class App {
 
   #getSavePropKey(xmlPath = this.xmlPath) {
     return "_saved_path_" + xmlPath.toLowerCase().trim();
+  }
+
+  savePropsSimple() {
+    return saveAppPropsSimple(this);
   }
 
   getSavedProps(xmlPath = this.xmlPath) {

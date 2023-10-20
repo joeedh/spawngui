@@ -12,7 +12,20 @@ export class Console extends AppArea {
   #last_sizekey = "";
 
   static STRUCT = nstructjs.inherit(Console, AppArea) + `
+  lastHeight : float;
+  maxSize    : array(f, float) | f === undefined ? -1 : f;
 }`;
+
+  loadSTRUCT(reader) {
+    super.loadSTRUCT(reader);
+    
+    if (this.maxSize[0] === -1) {
+      this.maxSize[0] = undefined;
+    }
+    if (this.maxSize[1] === -1) {
+      this.maxSize[1] = undefined;
+    }
+  }
 
   static define() {
     return {
@@ -21,6 +34,8 @@ export class Console extends AppArea {
       tagname : "console-window-x"
     }
   }
+
+  lastHeight = 100;
 
   constructor() {
     super();
@@ -49,7 +64,6 @@ export class Console extends AppArea {
     this.shadow.appendChild(this.container);
     this.container.add(this.console);
 
-    this.lastHeight = 100;
     this.maxSize = [undefined, undefined];
   }
 

@@ -146,7 +146,7 @@ export class ConsoleEmulator extends UIBase {
     if (typeof key === "number") {
       key = String.fromCharCode(key);
     }
-    
+
     if (this.decodeState) {
       console.log("key", key);
       let ret = this.decodeState.next(key);
